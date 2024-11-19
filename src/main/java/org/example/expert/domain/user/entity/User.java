@@ -13,35 +13,41 @@ import org.example.expert.domain.user.enums.UserRole;
 @Table(name = "users")
 public class User extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true)
-    private String email;
-    private String password;
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    public User(String email, String password, UserRole userRole) {
-        this.email = email;
-        this.password = password;
-        this.userRole = userRole;
-    }
+  @Column(unique = true)
+  private String email;
 
-    private User(Long id, String email, UserRole userRole) {
-        this.id = id;
-        this.email = email;
-        this.userRole = userRole;
-    }
+  private String password;
+  private String nickName;
 
-    public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
-    }
+  @Enumerated(EnumType.STRING)
+  private UserRole userRole;
 
-    public void changePassword(String password) {
-        this.password = password;
-    }
+  public User(String email, String password, String nickName, UserRole userRole) {
+    this.email = email;
+    this.password = password;
+    this.userRole = userRole;
+    this.nickName = nickName;
+  }
 
-    public void updateRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
+  private User(Long id, String email, UserRole userRole) {
+    this.id = id;
+    this.email = email;
+    this.userRole = userRole;
+  }
+
+  public static User fromAuthUser(AuthUser authUser) {
+    return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
+  }
+
+  public void changePassword(String password) {
+    this.password = password;
+  }
+
+  public void updateRole(UserRole userRole) {
+    this.userRole = userRole;
+  }
 }
