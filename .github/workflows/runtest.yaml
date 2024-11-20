@@ -29,6 +29,12 @@ jobs:
       - name: make executable gradlew
         run: chmod +x ./gradlew
 
+      - name: Wait for MySQL to be ready
+        run: |
+          curl -sS https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o wait-for-it.sh
+          chmod +x wait-for-it.sh
+          ./wait-for-it.sh localhost:3307 --timeout=60 --strict -- echo "MySQL is up"
+
       # run은 사용자 지정 스크립트 실행
       - name: run unittest
         run: |
