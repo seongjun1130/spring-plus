@@ -6,10 +6,13 @@ import org.example.expert.config.security.CustomUserDetails;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.request.TodoSearchCondition;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,6 +43,11 @@ public class TodoController {
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
           LocalDate endDate) {
     return ResponseEntity.ok(todoService.getTodos(page, size, weather,startDate,endDate));
+  }
+
+  @GetMapping("/todos/search")
+  public ResponseEntity<Page<TodoSearchResponse>> getTodosAll(TodoSearchCondition condition, Pageable pageable){
+    return ResponseEntity.ok(todoService.getTodosAll(condition,pageable));
   }
 
   @GetMapping("/todos/{todoId}")

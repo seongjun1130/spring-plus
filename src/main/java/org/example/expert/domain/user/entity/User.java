@@ -1,17 +1,15 @@
 package org.example.expert.domain.user.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.example.expert.config.security.CustomUserDetails;
-import org.example.expert.domain.common.dto.AuthUser;
-import org.example.expert.domain.common.entity.Timestamped;
-import org.example.expert.domain.user.enums.UserRole;
-import org.springframework.security.core.GrantedAuthority;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.example.expert.config.security.CustomUserDetails;
+import org.example.expert.domain.common.entity.Timestamped;
+import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 @Entity
@@ -27,16 +25,16 @@ public class User extends Timestamped {
   private String email;
 
   private String password;
-  private String nickName;
+  private String nickname;
 
   @Enumerated(EnumType.STRING)
   private UserRole userRole;
 
-  public User(String email, String password, String nickName, UserRole userRole) {
+  public User(String email, String password, String nickname, UserRole userRole) {
     this.email = email;
     this.password = password;
     this.userRole = userRole;
-    this.nickName = nickName;
+    this.nickname = nickname;
   }
 
   private User(Long id, String email, UserRole userRole) {

@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.config.security.CustomUserDetails;
-import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.request.TodoSearchCondition;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -27,7 +28,8 @@ public class TodoService {
   private final WeatherClient weatherClient;
 
   @Transactional
-  public TodoSaveResponse saveTodo(CustomUserDetails customUserDetails, TodoSaveRequest todoSaveRequest) {
+  public TodoSaveResponse saveTodo(
+      CustomUserDetails customUserDetails, TodoSaveRequest todoSaveRequest) {
     User user = User.fromAuthUser(customUserDetails);
 
     String weather = weatherClient.getTodayWeather();
@@ -44,13 +46,15 @@ public class TodoService {
         new UserResponse(user.getId(), user.getEmail()));
   }
 
+  // JPQL 이용 메소드
   @Transactional(readOnly = true)
   public Page<TodoResponse> getTodos(
       int page, int size, String weather, LocalDate startDate, LocalDate endDate) {
     Pageable pageable = PageRequest.of(page - 1, size);
 
     Page<Todo> todos =
-        todoRepository.findAllByOrderByModifiedAtWeatherORDate(weather, startDate, endDate, pageable);
+        todoRepository.findAllByOrderByModifiedAtWeatherORDate(
+            weather, startDate, endDate, pageable);
 
     return todos.map(
         todo ->
@@ -62,6 +66,12 @@ public class TodoService {
                 new UserResponse(todo.getUser().getId(), todo.getUser().getEmail()),
                 todo.getCreatedAt(),
                 todo.getModifiedAt()));
+  }
+
+  // Query DSL 이용 메소드
+  @Transactional(readOnly = true)
+  public Page<TodoSearchResponse> getTodosAll(TodoSearchCondition condition, Pageable pageable) {
+    return todoRepository.findAllByTodo(condition, pageable);
   }
 
   @Transactional(readOnly = true)

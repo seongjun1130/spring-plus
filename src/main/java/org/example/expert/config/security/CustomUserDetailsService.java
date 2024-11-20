@@ -24,11 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user =
         userRepository
-            .findByNickName(username)
+            .findByNickname(username)
             .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority(user.getUserRole().toString()));
     return new CustomUserDetails(
-        user.getNickName(),user.getId(), user.getEmail(), user.getPassword(), authorities);
+        user.getNickname(),user.getId(), user.getEmail(), user.getPassword(), authorities);
   }
 }

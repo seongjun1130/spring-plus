@@ -56,7 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return;
       }
 
-      setAuthentication(claims.get("nickName", String.class));
+      setAuthentication(claims.get("nickname", String.class));
 
       chain.doFilter(request, response);
     } catch (SecurityException | MalformedJwtException e) {
