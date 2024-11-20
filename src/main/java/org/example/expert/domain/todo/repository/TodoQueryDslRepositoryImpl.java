@@ -10,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.comment.entity.QComment;
 import org.example.expert.domain.manager.entity.QManager;
@@ -17,6 +18,7 @@ import org.example.expert.domain.todo.dto.request.TodoSearchCondition;
 import org.example.expert.domain.todo.dto.response.QTodoSearchResponse;
 import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.QTodo;
+import org.example.expert.domain.todo.entity.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +29,12 @@ import org.springframework.stereotype.Repository;
 public class TodoQueryDslRepositoryImpl implements TodoQueryDslRepository {
   private final JPAQueryFactory queryFactory;
 
+  private final QTodo todo = QTodo.todo;
+  private final QComment comment = QComment.comment;
+  private final QManager manager = QManager.manager;
+
   @Override
   public Page<TodoSearchResponse> findAllByTodo(TodoSearchCondition condition, Pageable pageable) {
-    QTodo todo = QTodo.todo;
-    QComment comment = QComment.comment;
-    QManager manager = QManager.manager;
 
     BooleanExpression conditionExpression = buildConditionExpression(condition);
 
@@ -54,6 +57,17 @@ public class TodoQueryDslRepositoryImpl implements TodoQueryDslRepository {
     List<TodoSearchResponse> contents = results.getResults();
     long total = results.getTotal();
     return new PageImpl<>(contents, pageable, total);
+  }
+
+  @Override
+  public Optional<Todo> findByIdWithUser(Long todoId) {
+    return Optional.ofNullable(
+        queryFactory
+            .selectFrom(todo)
+            .leftJoin(todo.user)
+            .fetchJoin()
+            .where(todo.id.eq(todoId))
+            .fetchOne());
   }
 
   private BooleanExpression buildConditionExpression(TodoSearchCondition condition) {

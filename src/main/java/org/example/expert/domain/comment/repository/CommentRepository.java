@@ -1,13 +1,7 @@
 package org.example.expert.domain.comment.repository;
 
-import java.util.List;
 import org.example.expert.domain.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-public interface CommentRepository extends JpaRepository<Comment, Long>,CommentQueryDslRepository {
-
-//  @Query("SELECT DISTINCT c FROM Comment c JOIN FETCH c.user WHERE c.todo.id = :todoId")
-//  List<Comment> findByTodoIdWithUser(@Param("todoId") Long todoId);
-}
+public interface CommentRepository
+    extends JpaRepository<Comment, Long>, CommentQueryDslRepository {}
