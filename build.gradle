@@ -18,6 +18,9 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+test {
+    jvmArgs "-Xms512m", "-Xmx2048m"
+}
 
 repositories {
     mavenCentral()
@@ -34,6 +37,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.10.2'
 

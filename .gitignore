@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### TEST ###
+src/test/java/org/example/expert/domain/auth/service/AuthServiceTest.java

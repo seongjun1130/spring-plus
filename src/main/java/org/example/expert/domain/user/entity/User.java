@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.config.security.CustomUserDetails;
@@ -15,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
+@AllArgsConstructor
 public class User extends Timestamped {
 
   @Id
