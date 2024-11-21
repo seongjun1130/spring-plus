@@ -24,7 +24,7 @@ public class WebSecurityConfig {
         .authorizeRequests(
             (authorizeRequests) ->
                 authorizeRequests
-                    .requestMatchers("/auth/**")
+                    .requestMatchers("/auth/**","/health")
                     .permitAll()
                     .requestMatchers("/admin/**")
                     .hasAuthority("ADMIN")
