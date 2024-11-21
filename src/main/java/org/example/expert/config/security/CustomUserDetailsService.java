@@ -21,11 +21,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   @Transactional
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     User user =
         userRepository
-            .findByNickname(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
+            .findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Not Found " + email));
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority(user.getUserRole().toString()));
     return new CustomUserDetails(

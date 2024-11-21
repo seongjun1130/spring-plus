@@ -56,7 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return;
       }
 
-      setAuthentication(claims.get("nickname", String.class));
+      setAuthentication(claims.get("email", String.class));
 
       chain.doFilter(request, response);
     } catch (SecurityException | MalformedJwtException e) {
@@ -74,15 +74,15 @@ public class JwtFilter extends OncePerRequestFilter {
     }
   }
 
-  public void setAuthentication(String username) {
+  public void setAuthentication(String email) {
     SecurityContext context = SecurityContextHolder.createEmptyContext();
-    Authentication authentication = getAuthentication(username);
+    Authentication authentication = getAuthentication(email);
     context.setAuthentication(authentication);
     SecurityContextHolder.setContext(context);
   }
 
-  private Authentication getAuthentication(String username) {
-    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+  private Authentication getAuthentication(String email) {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
 }
